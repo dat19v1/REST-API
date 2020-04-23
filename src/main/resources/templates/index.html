@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX fra API</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="content"> </div>
+
+<input type="text" id="txt"><br>
+<button onclick="create()">Send</button>
+
+
+<script>
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8080/post/"
+    }).done(function( data ) {
+        for(var i = 0; i < data.length; i++) {
+            $('#content').append(data[i].title + '<br>')
+        }
+    });
+
+
+    function create() {
+        var tit = $('#txt').val()
+
+        $.ajax({
+            method: "POST",
+            url: "http://localhost:8080/post/",
+            data : {title: tit, content : null}
+        }).done(function( data, status, xhr ) {
+            console.log(data)
+            console.log(status)
+            console.log(xhr.getResponseHeader("Location"))
+
+            var s = xhr.getResponseHeader("Location")
+            var t = s.substr(1)
+            window.location.href = "http://localhost:8080/post/" + t;
+        });
+
+    }
+
+</script>
+
+
+
+</body>
+</html>
